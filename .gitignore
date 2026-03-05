@@ -10,3 +10,5 @@ terraform/network/.terraform.lock.hcl
 terraform/eks/.terraform.lock.hcl
 terraform/eks/.terraform/providers/registry.terraform.io/hashicorp/aws/6.10.0/darwin_amd64/LICENSE.txt
 terraform/eks/.terraform/providers/registry.terraform.io/hashicorp/aws/6.10.0/darwin_amd64/terraform-provider-aws_v6.10.0_x5
+
+.helmignore

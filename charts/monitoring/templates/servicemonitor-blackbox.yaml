@@ -1,0 +1,26 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ .Values.blackbox.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    release: {{ .Values.releaseLabel }}
+spec:
+  selector:
+    matchLabels:
+      {{ .Values.blackbox.selector.label }}: {{ .Values.blackbox.selector.value }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Values.blackbox.namespace }}
+  endpoints:
+    {{- range .Values.blackbox.targets }}
+    - port: {{ $.Values.blackbox.port }}
+      path: {{ $.Values.blackbox.path }}
+      interval: {{ $.Values.blackbox.interval }}
+      params:
+        module: [{{ $.Values.blackbox.module }}]
+        target: [{{ . }}]
+      relabelings:
+        - sourceLabels: [__param_target]
+          targetLabel: target
+  {{- end }}

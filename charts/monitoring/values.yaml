@@ -1,0 +1,30 @@
+namespace: monitoring
+releaseLabel: prometheus
+
+app:
+  name: tinycloud-app-monitor
+  selector:
+    label: app.kubernetes.io/name
+    value: tinycloud
+  namespaces:
+    - tinycloud-dev
+    - tinycloud-staging
+    - tinycloud-prod
+  port: http
+  path: /metrics
+  interval: 15s
+
+blackbox:
+  name: blackbox-tinycloud
+  selector:
+    label: app.kubernetes.io/name
+    value: prometheus-blackbox-exporter
+  namespace: monitoring
+  port: http
+  path: /probe
+  interval: 30s
+  module: http_2xx
+  targets:
+    - http://tinycloud-app-dev.tinycloud-dev.svc.cluster.local:8080/metrics
+    - http://tinycloud-app-staging.tinycloud-staging.svc.cluster.local:8080/metrics
+    - http://tinycloud-app-prod.tinycloud-prod.svc.cluster.local:8080/metrics

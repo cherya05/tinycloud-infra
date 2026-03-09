@@ -1,0 +1,29 @@
+provider:
+  name: aws
+
+extraArgs:
+  - --aws-zone-type=public
+  - --domain-filter=hatstore-danil.info
+  - --txt-owner-id=tinycloud-id
+  - --txt-prefix=external-dns-
+
+serviceAccount:
+  create: true
+  name: external-dns
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::242902229138:role/external-dns-role
+
+
+env:
+  - name: AWS_REGION
+    value: "eu-north-1"
+  - name: EXTERNAL_DNS_RESOLVE_SERVICE_LOAD_BALANCER_HOSTNAME
+    value: "true"
+
+resources:
+  limits:
+    memory: 128Mi
+    cpu: 100m
+  requests:
+    memory: 64Mi
+    cpu: 50m

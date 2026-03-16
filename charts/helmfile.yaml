@@ -1,0 +1,44 @@
+releases:
+  - name: tinycloud-app-dev
+    namespace: tinycloud-dev
+    chart: ../../tinycloud-project/charts/tinycloud-backend
+    values:
+      - ../../tinycloud-project/charts/tinycloud-backend/values.yaml
+      - ../../tinycloud-project/charts/tinycloud-backend/values-dev.yaml
+
+  - name: tinycloud-app-staging
+    namespace: tinycloud-staging
+    chart: ../../tinycloud-project/charts/tinycloud-backend
+    values:
+      - ../../tinycloud-project/charts/tinycloud-backend/values.yaml
+      - ../../tinycloud-project/charts/tinycloud-backend/values-staging.yaml
+
+  - name: tinycloud-app-prod
+    namespace: tinycloud-prod
+    chart: ../../tinycloud-project/charts/tinycloud-backend
+    values:
+      - ../../tinycloud-project/charts/tinycloud-backend/values.yaml
+      - ../../tinycloud-project/charts/tinycloud-backend/values-prod.yaml
+
+
+  - name: tinycloud-frontend-dev
+    namespace: tinycloud-dev
+    chart: ../../tinycloud-frontend/charts/tinycloud-frontend
+    values:
+      - ../../tinycloud-frontend/charts/tinycloud-frontend/values.yaml
+      - ../../tinycloud-frontend/charts/tinycloud-frontend/values-dev.yaml
+
+  - name: tinycloud-frontend-staging
+    namespace: tinycloud-staging
+    chart: ../../tinycloud-frontend/charts/tinycloud-frontend
+    values:
+      - ../../tinycloud-frontend/charts/tinycloud-frontend/values.yaml
+      - ../../tinycloud-frontend/charts/tinycloud-frontend/values-staging.yaml
+  
+  - name: tinycloud-frontend-prod
+    namespace: tinycloud-prod
+    chart: ../../tinycloud-frontend/charts/tinycloud-frontend
+    values:
+      - ../../tinycloud-frontend/charts/tinycloud-frontend/values.yaml
+      - ../../tinycloud-frontend/charts/tinycloud-frontend/values-prod.yaml
+    

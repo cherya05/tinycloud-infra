@@ -1,0 +1,105 @@
+replicaCount: 1
+
+image:
+  repository: 242902229138.dkr.ecr.eu-north-1.amazonaws.com/tinycloud-docker-backend
+  pullPolicy: IfNotPresent
+
+imagePullSecrets:
+  - name: ecr-registry-secret
+
+nameOverride: ""
+fullnameOverride: ""
+
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: api.prod.hatstore-danil.info
+  hosts:
+    - host: api.prod.hatstore-danil.info
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+frontend:
+  serviceName: tinycloud-frontend
+  servicePort: 80
+  
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+elasticsearch:
+  enabled: false
+
+livenessProbe:
+  httpGet:
+    path: /url-mapping/
+    port: 8080
+  initialDelaySeconds: 30
+  periodSeconds: 10
+
+readinessProbe:
+  httpGet:
+    path: /url-mapping/
+    port: 8080
+  initialDelaySeconds: 5
+  periodSeconds: 5
+
+secretName: "postgresql-prod-secret"
+
+postgresql:
+  enabled: true
+  auth:
+    username: "tinycloud-prod-user"
+    database: "tinycloud"
+    existingSecret: "postgresql-prod-secret"
+    secretKeys:
+      adminPasswordKey: "postgres-password"
+      userPasswordKey: "password"
+
+env:
+  FLASK_ENV: production
+  FLASK_APP: manage.py
+  DB_PORT: "5432"
+  ELASTICSEARCH_HOST: "elasticsearch-master"
+  ELASTICSEARCH_PORT: "9200"
+
+# tolerations:
+#   - key: "environment"
+#     operator: "Equal"
+#     value: "prod"
+#     effect: "NoSchedule"
+
+storageclass:
+  type: "gp2"
+  fsType: "ext4"
+  encrypted: false
+  volumeBindingMode: WaitForFirstConsumer
+  allowVolumeExpansion: true
+  reclaimPolicy: Delete
+
+persistence:
+  enabled: true
+  storageClassName: default
+  accessMode: ReadWriteOnce
+  size: 10Gi
+  
+# nodeSelector:
+#   environment: "prod"

@@ -7,14 +7,12 @@ releases:
   - name: tinycloud-app-{{ .Environment.Name }}
     namespace: tinycloud-{{ .Environment.Name }}
     chart: oci://242902229138.dkr.ecr.eu-north-1.amazonaws.com/tinycloud-backend
-    version: 0.0.7
     values:
       - {{ .Environment.Name }}/values-backend.yaml
 
   - name: tinycloud-frontend-{{ .Environment.Name }}
     namespace: tinycloud-{{ .Environment.Name }}
     chart: oci://242902229138.dkr.ecr.eu-north-1.amazonaws.com/tinycloud-frontend
-    version: 0.0.4
     values:
       - {{ .Environment.Name }}/values-frontend.yaml
     

@@ -48,6 +48,15 @@ jobs:
               run: |
                 echo "${{ secrets.KUBECONFIG }}" > kubeconfig.yaml
                 echo "KUBECONFIG=$(pwd)/kubeconfig.yaml" >> $GITHUB_ENV
+            
+            - name: ECR Secret for Kubernetes
+              run: |
+                kubectl create secret docker-registry ecr-registry-secret \
+                  --docker-server=${{ steps.login-ecr.outputs.registry }} \
+                  --docker-username=AWS \
+                  --docker-password=$(aws ecr get-login-password --region ${{ env.AWS_REGION }}) \
+                  -n tinycloud-${{ github.event.inputs.environment }} \
+                  --dry-run=client -o yaml | kubectl apply -f -
 
             - name: Deploy
               uses: helmfile/helmfile-action@v2.2.0

@@ -28,9 +28,9 @@ ingress:
   tls: []
 
 backend:
-  serviceName: tinycloud-app-dev-tinycloud-backend
+  serviceName: tinycloud-backend-dev-tinycloud-backend
   servicePort: 8080
 
 env:
-  BACKEND_HOST: tinycloud-app-dev-tinycloud-backend
+  BACKEND_HOST: tinycloud-backend-dev-tinycloud-backend
   BACKEND_PORT: "8080"

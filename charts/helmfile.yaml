@@ -4,7 +4,7 @@ environments:
   prod:
 
 releases:
-  - name: tinycloud-app-{{ .Environment.Name }}
+  - name: tinycloud-backend-{{ .Environment.Name }}
     namespace: tinycloud-{{ .Environment.Name }}
     chart: oci://242902229138.dkr.ecr.eu-north-1.amazonaws.com/tinycloud-backend
     values:

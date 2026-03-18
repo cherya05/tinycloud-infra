@@ -43,6 +43,11 @@ jobs:
             - name: Login to Amazon ECR
               id: login-ecr
               uses: aws-actions/amazon-ecr-login@v2
+            
+            - name: Setup Kubeconfig
+              run: |
+                echo "${{ secrets.KUBECONFIG }}" > kubeconfig.yaml
+                echo "KUBECONFIG=$(pwd)/kubeconfig.yaml" >> $GITHUB_ENV
 
             - name: Deploy
               uses: helmfile/helmfile-action@v2.2.0

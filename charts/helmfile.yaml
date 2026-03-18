@@ -3,6 +3,8 @@ environments:
   staging:
   prod:
 
+---
+
 releases:
   - name: tinycloud-backend-{{ .Environment.Name }}
     namespace: tinycloud-{{ .Environment.Name }}

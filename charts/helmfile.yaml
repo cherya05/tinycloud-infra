@@ -1,44 +1,20 @@
+environments:
+  dev:
+  staging:
+  prod:
+
 releases:
-  - name: tinycloud-app-dev
-    namespace: tinycloud-dev
-    chart: ../../tinycloud-project/charts/tinycloud-backend
+  - name: tinycloud-app-{{ .Environment.Name }}
+    namespace: tinycloud-{{ .Environment.Name }}
+    chart: oci://242902229138.dkr.ecr.eu-north-1.amazonaws.com/tinycloud-backend
+    version: 0.0.7
     values:
-      - ../../tinycloud-project/charts/tinycloud-backend/values.yaml
-      - tinycloud-dev/values-backend-dev.yaml
+      - {{ .Environment.Name }}/values-backend.yaml
 
-  - name: tinycloud-app-staging
-    namespace: tinycloud-staging
-    chart: ../../tinycloud-project/charts/tinycloud-backend
+  - name: tinycloud-frontend-{{ .Environment.Name }}
+    namespace: tinycloud-{{ .Environment.Name }}
+    chart: oci://242902229138.dkr.ecr.eu-north-1.amazonaws.com/tinycloud-frontend
+    version: 0.0.4
     values:
-      - ../../tinycloud-project/charts/tinycloud-backend/values.yaml
-      - tinycloud-staging/values-backend-staging.yaml
-
-  - name: tinycloud-app-prod
-    namespace: tinycloud-prod
-    chart: ../../tinycloud-project/charts/tinycloud-backend
-    values:
-      - ../../tinycloud-project/charts/tinycloud-backend/values.yaml
-      - tinycloud-prod/values-backend-prod.yaml
-
-
-  - name: tinycloud-frontend-dev
-    namespace: tinycloud-dev
-    chart: ../../tinycloud-frontend/charts/tinycloud-frontend
-    values:
-      - ../../tinycloud-frontend/charts/tinycloud-frontend/values.yaml
-      - tinycloud-dev/values-frontend-dev.yaml
-
-  - name: tinycloud-frontend-staging
-    namespace: tinycloud-staging
-    chart: ../../tinycloud-frontend/charts/tinycloud-frontend
-    values:
-      - ../../tinycloud-frontend/charts/tinycloud-frontend/values.yaml
-      - tinycloud-staging/values-frontend-staging.yaml
-  
-  - name: tinycloud-frontend-prod
-    namespace: tinycloud-prod
-    chart: ../../tinycloud-frontend/charts/tinycloud-frontend
-    values:
-      - ../../tinycloud-frontend/charts/tinycloud-frontend/values.yaml
-      - tinycloud-prod/values-frontend-prod.yaml
+      - {{ .Environment.Name }}/values-frontend.yaml
     

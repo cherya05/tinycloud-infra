@@ -61,7 +61,7 @@ jobs:
       - name: Deploy
         uses: helmfile/helmfile-action@v2.2.0
         with:
-          helmfile-args: --environment ${{ github.event.inputs.environment }} -l name=tinycloud-${{ github.event.inputs.service }}-${{ github.event.inputs.environment }} --state-values-set version=${{ github.event.inputs.version }} sync --wait
+          helmfile-args: --environment ${{ github.event.inputs.environment }} -l name=tinycloud-${{ github.event.inputs.service }}-${{ github.event.inputs.environment }} --state-values-set version=${{ github.event.inputs.version }} sync --create-namespace --wait
           helmfile-workdirectory: ./charts
             
           

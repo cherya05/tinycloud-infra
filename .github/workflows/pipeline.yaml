@@ -49,6 +49,10 @@ jobs:
           echo "${{ secrets.KUBECONFIG }}" > kubeconfig.yaml
           echo "KUBECONFIG=$(pwd)/kubeconfig.yaml" >> $GITHUB_ENV
           
+      - name: Create Namespace
+        run: |
+          kubectl create namespace tinycloud-${{ github.event.inputs.environment }} --dry-run=client -o yaml | kubectl apply -f -
+
       - name: ECR Secret for Kubernetes
         run: |
           kubectl create secret docker-registry ecr-registry-secret \
@@ -61,7 +65,7 @@ jobs:
       - name: Deploy
         uses: helmfile/helmfile-action@v2.2.0
         with:
-          helmfile-args: --environment ${{ github.event.inputs.environment }} -l name=tinycloud-${{ github.event.inputs.service }}-${{ github.event.inputs.environment }} --state-values-set version=${{ github.event.inputs.version }} sync --create-namespace --wait
+          helmfile-args: --environment ${{ github.event.inputs.environment }} -l name=tinycloud-${{ github.event.inputs.service }}-${{ github.event.inputs.environment }} --state-values-set version=${{ github.event.inputs.version }} sync --wait
           helmfile-workdirectory: ./charts
             
           

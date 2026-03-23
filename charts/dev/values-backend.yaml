@@ -116,7 +116,7 @@ storageclass:
 
 persistence:
   enabled: true
-  storageClassName: default
+  storageClassName: civo-volume
   accessMode: ReadWriteOnce
   size: 10Gi
 

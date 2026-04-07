@@ -16,7 +16,7 @@ resources:
     memory: 16Mi
 
 ingress:
-  enabled: true
+  enabled: false
   className: "nginx"
   annotations:
     external-dns.alpha.kubernetes.io/hostname: staging.hatstore-danil.info

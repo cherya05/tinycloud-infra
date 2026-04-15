@@ -1,0 +1,71 @@
+name: Deploy
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        type: choice
+        options:
+          - dev
+          - staging
+          - prod
+              
+      service:
+        description: 'Service to deploy'
+        required: true
+        type: choice
+        options:
+          - backend
+          - frontend
+
+      version:
+        description: 'Version to deploy'
+        required: true
+        type: string
+env:
+  AWS_REGION: eu-north-1
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+            
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+            
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+          
+      - name: Setup Kubeconfig
+        run: |
+          echo "${{ secrets.KUBECONFIG }}" > kubeconfig.yaml
+          echo "KUBECONFIG=$(pwd)/kubeconfig.yaml" >> $GITHUB_ENV
+          
+      - name: Create Namespace
+        run: |
+          kubectl create namespace tinycloud-${{ github.event.inputs.environment }} --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: ECR Secret for Kubernetes
+        run: |
+          kubectl create secret docker-registry ecr-registry-secret \
+            --docker-server=${{ steps.login-ecr.outputs.registry }} \
+            --docker-username=AWS \
+            --docker-password=$(aws ecr get-login-password --region ${{ env.AWS_REGION }}) \
+            -n tinycloud-${{ github.event.inputs.environment }} \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Deploy
+        uses: helmfile/helmfile-action@v2.2.0
+        with:
+          helmfile-args: --environment ${{ github.event.inputs.environment }} -l name=tinycloud-${{ github.event.inputs.service }}-${{ github.event.inputs.environment }} --state-values-set version=${{ github.event.inputs.version }} sync --wait
+          helmfile-workdirectory: ./charts
+            
+          

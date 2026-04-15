@@ -96,8 +96,8 @@ storageclass:
   reclaimPolicy: Delete
 
 persistence:
-  enabled: true
-  storageClassName: default
+  enabled: false
+  storageClassName: civo-volume
   accessMode: ReadWriteOnce
   size: 10Gi
   

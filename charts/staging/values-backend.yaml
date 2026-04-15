@@ -22,7 +22,7 @@ service:
   port: 8080
 
 ingress:
-  enabled: true
+  enabled: false
   className: "nginx"
   annotations:
     external-dns.alpha.kubernetes.io/hostname: api.staging.hatstore-danil.info
@@ -96,8 +96,8 @@ storageclass:
   reclaimPolicy: Delete
 
 persistence:
-  enabled: true
-  storageClassName: default
+  enabled: false
+  storageClassName: civo-volume
   accessMode: ReadWriteOnce
   size: 10Gi
 

@@ -16,7 +16,7 @@ resources:
     memory: 16Mi
 
 ingress:
-  enabled: true
+  enabled: false
   className: "nginx"
   annotations:
     external-dns.alpha.kubernetes.io/hostname: dev.hatstore-danil.info
@@ -28,9 +28,9 @@ ingress:
   tls: []
 
 backend:
-  serviceName: tinycloud-app-dev-tinycloud-backend
+  serviceName: tinycloud-backend-dev
   servicePort: 8080
 
 env:
-  BACKEND_HOST: tinycloud-app-dev-tinycloud-backend
+  BACKEND_HOST: tinycloud-backend-dev
   BACKEND_PORT: "8080"

@@ -3,16 +3,20 @@ environments:
   staging:
   prod:
 
+---
+
 releases:
-  - name: tinycloud-app-{{ .Environment.Name }}
+  - name: tinycloud-backend-{{ .Environment.Name }}
     namespace: tinycloud-{{ .Environment.Name }}
     chart: oci://242902229138.dkr.ecr.eu-north-1.amazonaws.com/tinycloud-backend
+    version: {{ .Values.version }}
     values:
       - {{ .Environment.Name }}/values-backend.yaml
 
   - name: tinycloud-frontend-{{ .Environment.Name }}
     namespace: tinycloud-{{ .Environment.Name }}
     chart: oci://242902229138.dkr.ecr.eu-north-1.amazonaws.com/tinycloud-frontend
+    version: {{ .Values.version }}
     values:
       - {{ .Environment.Name }}/values-frontend.yaml
     
